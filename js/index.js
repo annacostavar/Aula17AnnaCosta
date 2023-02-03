@@ -62,6 +62,7 @@ async function BuscaPostEspecificos(id) {
 
     dataComentario.map((comentario) => {
         criarComentario(comentario)
+        loadingElement.classList.add("hide")
     } )
 }
 
