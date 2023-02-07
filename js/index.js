@@ -10,7 +10,7 @@ const comentariosContainer = document.querySelector("#comentarios-container")
 
 const comentarioForm = document.querySelector("#comentario-form")
 const emailInput = document.querySelector("#email")
-const comentarioInput = document.querySelector("#tcomentario") 
+const comentarioInput = document.querySelector("#tcomentario")
 
 if (!idPost) {
     BuscarTodosPosts()
@@ -26,7 +26,7 @@ else {
             email: emailInput.value,
             body: comentarioInput.value,
         }
-        console.log("Comentário antes do tratamento Json: "  + comentarioInserido)
+        console.log("Comentário antes do tratamento Json: " + comentarioInserido)
 
         comentarioInserido = JSON.stringify(comentarioInserido)
         console.log("Comentário depois do tratamento Json: " + comentarioInserido)
@@ -105,15 +105,15 @@ function criarComentario(comentario) {
 
 }
 
-async function postComentario (comentario){
-    const resposta = await fetch(url,{
+async function postComentario(comentario) {
+    const resposta = await fetch(url, {
         method: "POST",
         body: comentario,
         headers: {
             "Content-type": "application/json",
         }
-    } )
+    })
     const dataResposta = await resposta.json()
-    
+
     criarComentario(dataResposta)
 }
