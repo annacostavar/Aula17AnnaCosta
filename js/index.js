@@ -7,13 +7,32 @@ const url = "https://jsonplaceholder.typicode.com/posts"
 const urlParametros = new URLSearchParams(window.location.search)
 const idPost = urlParametros.get("id")
 const comentariosContainer = document.querySelector("#comentarios-container")
+
+const comentarioForm = document.querySelector("#comentario-form")
+const emailInput = document.querySelector("#email")
+const comentarioInput = document.querySelector("#tcomentario") 
+
 if (!idPost) {
     BuscarTodosPosts()
 }
 else {
-    //Tratar aqui o metodo de gravar comentarios e visualizar detalhe do post
-    console.log("o valor do idPost é " + idPost)
+
     BuscaPostEspecificos(idPost)
+
+    comentarioForm.addEventListener("submit", (e) => {
+        e.preventDefault()
+
+        let comentarioInserido = {
+            email: emailInput.value,
+            body: comentarioInput.value,
+        }
+        console.log("Comentário antes do tratamento Json: "  + comentarioInserido)
+
+        comentarioInserido = JSON.stringify(comentarioInserido)
+        console.log("Comentário depois do tratamento Json: " + comentarioInserido)
+        //Chamar a Api de gravar comentario
+
+    })
 }
 
 async function BuscarTodosPosts() {
@@ -44,8 +63,13 @@ async function BuscarTodosPosts() {
     })
 }
 async function BuscaPostEspecificos(id) {
-    const respostaPost = await fetch(`${url}/${id}`) //ou fetch(url + "/" + id)
-    const respostaComentario = await fetch(`${url}/${id}/comments`)
+    // const respostaPost = await fetch(`${url}/${id}`) //ou fetch(url + "/" + id)
+    // const respostaComentario = await fetch(`${url}/${id}/comments`)
+
+    const [respostaPost, respostaComentario] = await Promise.all([
+        fetch(`${url}/${id}`),
+        fetch(`${url}/${id}/comments`),
+    ])
 
     const dataPostagem = await respostaPost.json()
     const dataComentario = await respostaComentario.json()
@@ -63,7 +87,7 @@ async function BuscaPostEspecificos(id) {
     dataComentario.map((comentario) => {
         criarComentario(comentario)
         loadingElement.classList.add("hide")
-    } )
+    })
 }
 
 function criarComentario(comentario) {
